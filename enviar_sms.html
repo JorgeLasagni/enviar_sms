@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Enviar SMS con Textbelt</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f6f6f6;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    input, textarea, button {
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px;
+      font-size: 1rem;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    pre {
+      background: #eee;
+      padding: 10px;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Enviar SMS con Textbelt</h2>
+
+    <label for="telefono">Número de teléfono:</label>
+    <input id="telefono" type="text" value="+5491150021672">
+
+    <label for="mensaje">Mensaje:</label>
+    <textarea id="mensaje" rows="3">¡Hola! Este SMS fue enviado desde el navegador usando Textbelt.</textarea>
+
+    <button id="enviarBtn">Enviar SMS</button>
+
+    <h3>Resultado:</h3>
+    <pre id="resultado">Esperando envío...</pre>
+  </div>
+
+  <script>
+    document.getElementById('enviarBtn').addEventListener('click', async () => {
+      const telefono = document.getElementById('telefono').value.trim();
+      const mensaje = document.getElementById('mensaje').value.trim();
+      const resultado = document.getElementById('resultado');
+
+      if (!telefono || !mensaje) {
+        resultado.textContent = 'Por favor, completa todos los campos.';
+        return;
+      }
+
+      resultado.textContent = 'Enviando...';
+
+      try {
+        const response = await fetch('https://textbelt.com/text', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            phone: telefono,
+            message: mensaje,
+            key: 'textbelt',
+          }),
+        });
+
+        const data = await response.json();
+        resultado.textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        resultado.textContent = 'Error al enviar el SMS: ' + error;
+      }
+    });
+  </script>
+</body>
+</html>
