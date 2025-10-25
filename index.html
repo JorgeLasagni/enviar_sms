@@ -48,7 +48,7 @@
     <input id="telefono" type="text" value="+5491150021672">
 
     <label for="mensaje">Mensaje:</label>
-    <textarea id="mensaje" rows="3">¡Hola! Este SMS fue enviado desde el navegador usando Textbelt.</textarea>
+    <textarea id="mensaje" rows="3">¡Hola! Este SMS fue enviado desde Netlify usando Textbelt.</textarea>
 
     <button id="enviarBtn">Enviar SMS</button>
 
@@ -70,14 +70,10 @@
       resultado.textContent = 'Enviando...';
 
       try {
-        const response = await fetch('https://textbelt.com/text', {
+        const response = await fetch('/.netlify/functions/sendsms', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            phone: telefono,
-            message: mensaje,
-            key: 'textbelt',
-          }),
+          body: JSON.stringify({ phone: telefono, message: mensaje }),
         });
 
         const data = await response.json();
